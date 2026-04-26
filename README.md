@@ -26,7 +26,7 @@ Authentication is handled by the installed `gemini` CLI. This server does not re
 
 Before using this tool, ensure you have:
 
-1. **[Node.js](https://nodejs.org/)** (v22.13.0 or higher)
+1. **[Node.js](https://nodejs.org/)** (v20.12.0 or higher)
 2. **[Google Gemini CLI](https://github.com/google-gemini/gemini-cli)** installed and configured
 
 
