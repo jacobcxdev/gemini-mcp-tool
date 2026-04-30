@@ -32,12 +32,14 @@ jobs:
           git clone --depth 1 https://x-access-token:${{ secrets.INDEX_REPO_TOKEN }}@github.com/jacobcxdev/jacobcxdev.github.io.git action-checkout
 
       - name: Build documentation
+        env:
+          VITEPRESS_BASE: /repo/${{ github.repository_id }}/${{ github.ref_type == 'tag' && 'tag' || 'tree' }}/${{ github.ref_name }}/
         run: npm run docs:build
 
       - name: Publish to index
         uses: ./action-checkout/actions/publish-docs
         with:
           token: ${{ secrets.INDEX_REPO_TOKEN }}
-          build-command: npm run docs:build
+          build-command: VITEPRESS_BASE=/repo/${{ github.repository_id }}/${{ github.ref_type == 'tag' && 'tag' || 'tree' }}/${{ github.ref_name }}/ npm run docs:build
           output-dir: docs/.vitepress/dist
           stable-branch: main
