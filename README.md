@@ -30,21 +30,19 @@ Before using this tool, ensure you have:
 2. **[Google Gemini CLI](https://github.com/google-gemini/gemini-cli)** installed and configured
 
 
-### Local Setup
+### Installation
 
-Build the fork locally:
+Install the published package from npm:
 
 ```bash
-cd /Users/jacob/Developer/src/github/jacobcxdev/gemini-mcp-tool
-npm install
-npm run build
+npm install -g @jacobcxdev/gemini-mcp-tool
 ```
 
-Register the local build with Claude Code:
+Register the published package with Claude Code:
 
 ```bash
 claude mcp remove gemini-cli -s user
-claude mcp add gemini-cli -s user -- node /Users/jacob/Developer/src/github/jacobcxdev/gemini-mcp-tool/dist/index.js
+claude mcp add gemini-cli -s user -- gemini-mcp
 ```
 
 ### Verify Installation
@@ -67,16 +65,27 @@ Register the MCP server with your MCP client:
 {
   "mcpServers": {
     "gemini-cli": {
-      "command": "node",
-      "args": [
-        "/Users/jacob/Developer/src/github/jacobcxdev/gemini-mcp-tool/dist/index.js"
-      ]
+      "command": "gemini-mcp"
     }
   }
 }
 ```
 
-The fork is intentionally documented as a local build until it is published under the `@jacobcxdev` npm scope.
+If your client does not resolve globally installed npm binaries, use `npx` instead:
+
+```json
+{
+  "mcpServers": {
+    "gemini-cli": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@jacobcxdev/gemini-mcp-tool"
+      ]
+    }
+  }
+}
+```
 
 **Configuration File Locations:**
 
