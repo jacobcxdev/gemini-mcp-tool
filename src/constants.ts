@@ -86,6 +86,7 @@ export interface ToolArguments {
   model?: string;
   sandbox?: boolean | string;
   changeMode?: boolean | string;
+  noFallback?: boolean;
   chunkIndex?: number | string; // Which chunk to return (1-based)
   chunkCacheKey?: string; // Optional cache key for continuation
   message?: string; // For Ping tool -- Un-used.

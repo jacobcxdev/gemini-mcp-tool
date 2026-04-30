@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [1.2.4] - 2026-04-30
+
+### Fixed
+- Restored `--no-fallback` CLI support and `GEMINI_MCP_NO_FALLBACK=1` handling so
+  Gemini Pro quota errors propagate instead of automatically retrying with Flash.
+- Threaded `noFallback` through the `ask-gemini` tool and restored regression tests
+  covering the fallback gate.
+
+## [1.2.3] - 2026-04-30
+
 - Preserve Gemini CLI OAuth by routing model calls through the installed `gemini` binary.
 - Harden child-process handling so Gemini command completion does not terminate the MCP stdio server.
 - Update fork documentation and installation instructions for `jacobcxdev/gemini-mcp-tool`.

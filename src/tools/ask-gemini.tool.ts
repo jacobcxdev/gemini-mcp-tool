@@ -11,6 +11,7 @@ const askGeminiArgsSchema = z.object({
   model: z.string().optional().describe("Optional model to use (e.g., 'gemini-2.5-flash'). If not specified, uses the default model (gemini-2.5-pro)."),
   sandbox: z.boolean().default(false).describe("Use sandbox mode (-s flag) to safely test code changes, execute scripts, or run potentially risky operations in an isolated environment"),
   changeMode: z.boolean().default(false).describe("Enable structured change mode - formats prompts to prevent tool errors and returns structured edit suggestions that Claude can apply directly"),
+  noFallback: z.boolean().default(false).describe("Disable automatic fallback from gemini-2.5-pro to gemini-2.5-flash when Pro quota is exceeded"),
   chunkIndex: z.union([z.number(), z.string()]).optional().describe("Which chunk to return (1-based)"),
   chunkCacheKey: z.string().optional().describe("Optional cache key for continuation"),
 });
@@ -24,7 +25,7 @@ export const askGeminiTool: UnifiedTool = {
   },
   category: 'gemini',
   execute: async (args, onProgress) => {
-    const { prompt, model, sandbox, changeMode, chunkIndex, chunkCacheKey } = args; if (!prompt?.trim()) { throw new Error(ERROR_MESSAGES.NO_PROMPT_PROVIDED); }
+    const { prompt, model, sandbox, changeMode, chunkIndex, chunkCacheKey, noFallback } = args; if (!prompt?.trim()) { throw new Error(ERROR_MESSAGES.NO_PROMPT_PROVIDED); }
   
     if (changeMode && chunkIndex && chunkCacheKey) {
       return processChangeModeOutput(
@@ -40,7 +41,8 @@ export const askGeminiTool: UnifiedTool = {
       model as string | undefined,
       !!sandbox,
       !!changeMode,
-      onProgress
+      onProgress,
+      noFallback === true
     );
     
     if (changeMode) {
