@@ -1,7 +1,11 @@
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 const base = process.env.VITEPRESS_BASE ?? '/gemini-mcp-tool/'
+const packageVersion = JSON.parse(
+  readFileSync(new URL('../../package.json', import.meta.url), 'utf8')
+).version
 
 export default withMermaid(
   defineConfig({
@@ -19,6 +23,7 @@ export default withMermaid(
     ],
     
     themeConfig: {
+    packageVersion,
     logo: '/icon.png',
     
     nav: [
@@ -68,7 +73,7 @@ export default withMermaid(
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/jamubc/gemini-mcp-tool' }
+      { icon: 'github', link: 'https://github.com/jacobcxdev/gemini-mcp-tool' }
     ],
 
     footer: {

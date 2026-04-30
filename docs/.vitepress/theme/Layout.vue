@@ -6,7 +6,7 @@
     </template>
     <template #nav-bar-content-before>
       <div class="nav-warning">
-        🏷️ <span>1.1.4</span>
+        🏷️ <span>{{ theme.packageVersion }}</span>
       </div>
     </template>
     <template #sidebar-nav-after>
@@ -38,7 +38,7 @@ import FundingLayout from './FundingLayout.vue'
 
 const { Layout } = DefaultTheme
 const route = useRoute()
-const { frontmatter } = useData()
+const { frontmatter, theme } = useData()
 
 const isHomePage = computed(() => route.path === '/' || route.path === '/gemini-mcp-tool/')
 const isFundingPage = computed(() => route.path.includes('/funding'))
