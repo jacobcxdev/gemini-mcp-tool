@@ -1,39 +1,43 @@
-name: Deploy Docs
+name: Publish Documentation
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+    tags:
+      - "*"
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
 
 jobs:
-  build:
+  publish-docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: npm run docs:build
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
+      - name: Checkout
+        uses: actions/checkout@v5
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Checkout index repository
+        run: |
+          git clone --depth 1 https://x-access-token:${{ secrets.INDEX_REPO_TOKEN }}@github.com/jacobcxdev/jacobcxdev.github.io.git action-checkout
+
+      - name: Build documentation
+        run: npm run docs:build
+
+      - name: Publish to index
+        uses: ./action-checkout/actions/publish-docs
+        with:
+          token: ${{ secrets.INDEX_REPO_TOKEN }}
+          build-command: npm run docs:build
+          output-dir: docs/.vitepress/dist
+          stable-branch: main
