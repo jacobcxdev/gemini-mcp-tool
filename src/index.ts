@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import {
@@ -23,6 +26,13 @@ import { PROTOCOL, ToolArguments } from "./constants.js";
 const PROGRESS_NOTIFICATIONS_ENABLED = process.env.GEMINI_MCP_ENABLE_PROGRESS === "1";
 const NO_FALLBACK_ENABLED =
   process.argv.includes("--no-fallback") || process.env.GEMINI_MCP_NO_FALLBACK === "1";
+
+if (process.argv.includes("--version")) {
+  const packageJsonPath = join(dirname(fileURLToPath(import.meta.url)), "../package.json");
+  const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as { version: string };
+  console.log(packageJson.version);
+  process.exit(0);
+}
 
 trace("process.start", { argvCount: process.argv.length });
 
